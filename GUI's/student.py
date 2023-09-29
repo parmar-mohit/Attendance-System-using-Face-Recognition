@@ -1,3 +1,4 @@
+# should open after clicking student details
 import tkinter
 from tkinter import ttk, messagebox
 import cv2
@@ -5,7 +6,7 @@ from PIL import Image, ImageTk
 
 window = tkinter.Tk()
 window.title("Student Details")
-window.geometry('600x660')
+window.geometry('620x730')
 window.configure(bg='#333333')
 
 # Create a global variable to store the captured image
@@ -24,6 +25,11 @@ def validate_gr_number_input(event):
         # You can choose to handle this case differently if needed
         pass
 
+def validate_year_input(event):
+    entered_year = year_combobox.get()
+    if entered_year not in year_values:
+        year_combobox.set(year_values[0])  # Reset to the default value
+
 def login():
     # Retrieve values from entry fields and the Combobox
     entered_roll_number = roll_number_entry.get()
@@ -31,11 +37,12 @@ def login():
     entered_last_name = last_name_entry.get()
     entered_email = email_entry.get()
     entered_gr_number = gr_number_entry.get()
+    entered_year = year_combobox.get()
     entered_division = division_combobox.get()
 
     if not entered_roll_number.isdigit() or len(entered_roll_number) != 3:
         messagebox.showerror(title="Error", message="Roll number must be a 3-digit integer.")
-    elif not entered_first_name or not entered_last_name or not entered_email or len(entered_gr_number) != 9 or not entered_division:
+    elif not entered_first_name or not entered_last_name or not entered_email or len(entered_gr_number) != 9 or not entered_year or not entered_division:
         messagebox.showerror(title="Error", message="Please enter all details.")
     else:
         # Simulate storing student details in the database
@@ -49,7 +56,8 @@ def login():
         last_name_entry.delete(0, tkinter.END)
         email_entry.delete(0, tkinter.END)
         gr_number_entry.delete(0, tkinter.END)
-        division_combobox.set("A")  # Reset the Combobox value
+        year_combobox.set(year_values[0])  # Reset the Year Combobox
+        division_combobox.set("A")  # Reset the Division Combobox
 
 def capture_image():
     pass
@@ -74,6 +82,11 @@ email_entry = tkinter.Entry(frame, font=("Arial", 16))
 gr_number_label = tkinter.Label(
     frame, text="GR Number", bg='#333333', fg="#FFFFFF", font=("Arial", 16))
 gr_number_entry = tkinter.Entry(frame, font=("Arial", 16))
+year_label = tkinter.Label(
+    frame, text="Year", bg='#333333', fg="#FFFFFF", font=("Arial", 16))
+year_values = ["FE", "SE", "TE", "BE"]
+year_combobox = ttk.Combobox(frame, values=year_values, font=("Arial", 16))
+year_combobox.set(year_values[0])  # Set the default value
 division_label = tkinter.Label(
     frame, text="Division", bg='#333333', fg="#FFFFFF", font=("Arial", 16))
 division_values = ["A", "B"]
@@ -91,6 +104,9 @@ roll_number_entry.bind('<KeyRelease>', validate_roll_number_input)
 # Bind the gr_number_entry to the validate_gr_number_input function
 gr_number_entry.bind('<KeyRelease>', validate_gr_number_input)
 
+# Bind the year_combobox to the validate_year_input function
+year_combobox.bind('<<ComboboxSelected>>', validate_year_input)
+
 # Placing widgets on the screen
 login_label.grid(row=0, column=0, columnspan=2, sticky="news", pady=40)
 roll_number_label.grid(row=1, column=0)
@@ -103,10 +119,13 @@ email_label.grid(row=4, column=0)
 email_entry.grid(row=4, column=1, pady=20)
 gr_number_label.grid(row=5, column=0)
 gr_number_entry.grid(row=5, column=1, pady=20)
-division_label.grid(row=6, column=0)
-division_combobox.grid(row=6, column=1, pady=20)
-capture_image_button.grid(row=7, column=0, columnspan=2, pady=10)
-submit_button.grid(row=8, column=0, columnspan=2, pady=10)
+year_label.grid(row=6, column=0)
+year_combobox.grid(row=6, column=1, pady=20)
+division_label.grid(row=7, column=0)
+division_combobox.grid(row=7, column=1, pady=20)
+capture_image_button.grid(row=8, column=0, columnspan=2, pady=10)
+submit_button.grid(row=9, column=0, columnspan=2, pady=10)
 frame.pack()
 
 window.mainloop()
+
