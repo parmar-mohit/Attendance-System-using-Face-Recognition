@@ -33,4 +33,3 @@ courses_button.grid(row=3, column=0, pady=20)
 
 frame.pack()
 window.mainloop()
-
