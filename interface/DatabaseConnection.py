@@ -63,3 +63,26 @@ class DatabaseConnection:
         for student in students:
             query = "INSERT INTO attendance VALUES({},{},\"{}\");".format(student,course,fDate)
             self.executeUpdateQuery(query)
+
+    def getReportData(self,teacher):
+        query = "SELECT course_id FROM course WHERE teacher = \"{}\";".format(teacher)
+        result = self.executeReadQuery(query)
+        courses = [i[0] for i in result]
+
+        reportData = {}
+        header = ["Name","Roll No","Attendance Count"]
+        for course in courses:
+            data = [header]
+            query = "SELECT firstname,lastname,roll_no,COUNT(lec_date) FROM attendance JOIN student ON student.gr_no = attendance.student WHERE course_id = {} GROUP BY attendance.student;".format(course)
+            result =  self.executeReadQuery(query)
+            for row in result:
+                data.append([row[0]+" "+row[1],row[2],row[3]])
+            
+            reportData[(course,self.getCourseName(course))] = data
+        
+        return reportData
+
+    def getCourseName(self,course_id):
+        query = "SELECT course_name FROM course WHERE course_id = {};".format(course_id)
+        result = self.executeReadQuery(query)
+        return result[0][0]
