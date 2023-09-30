@@ -4,6 +4,7 @@ from tkinter import ttk, messagebox
 from tkcalendar import Calendar
 from interface.DatabaseConnection import DatabaseConnection
 from interface.video_frames import captureFrames,get_faces,getStudents
+from interface.generate_pdf import generate_report
 
 def showAttendanceInterface(teacher_username):
     window = tkinter.Tk()
@@ -26,10 +27,9 @@ def showAttendanceInterface(teacher_username):
             messagebox.showinfo("Attendance Captured", f"Attendance for Course ID {course_id} on {selected_date} captured successfully!")
             course_combobox.set(courseList[0])
 
-    def generate_report():
-        # Add your logic to generate a report
-        # For now, just show a message
-        messagebox.showinfo("Generate Report", "Generating report...")
+    def generate_report_button_on_click():
+        generate_report(teacher_username)
+        messagebox.showinfo("Report Generated", "Report had been generated successfully")
 
     frame = tkinter.Frame(bg='#333333')
 
@@ -50,7 +50,7 @@ def showAttendanceInterface(teacher_username):
         frame, text="Capture Attendance", bg="#FF3399", fg="#FFFFFF", font=("Arial", 16), command=capture_attendance)
 
     generate_button = tkinter.Button(
-        frame, text="Generate Report", bg="#FF3399", fg="#FFFFFF", font=("Arial", 16), command=generate_report)
+        frame, text="Generate Report", bg="#FF3399", fg="#FFFFFF", font=("Arial", 16), command=generate_report_button_on_click)
 
     # Placing widgets on the screen
     attendance_label.grid(row=0, column=0, columnspan=2, sticky="news", pady=40)
