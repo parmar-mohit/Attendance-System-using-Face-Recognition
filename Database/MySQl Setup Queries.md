@@ -48,7 +48,7 @@ CREATE TABLE course(
     CHECK( year IN ("FE","SE","TE","BE") )
 );
 
-CREATE TABLE attendace(
+CREATE TABLE attendance(
     student VARCHAR(9),
     course_id INT,
     lec_date DATE,
